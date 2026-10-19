@@ -54,3 +54,37 @@ Nenhuma função lê dados digitados: tudo recebe parâmetros, então os testes 
  
 
 
+
+## Refinamento antes da integração — 18/10/2026
+
+Os nomes da implementação serão em inglês. As definições abaixo corrigem as
+ambiguidades das responsabilidades descritas acima:
+
+- `User` e `Role`: usuário e perfil (`ADMIN`, `MONITOR`, `STUDENT`).
+- `AppointmentSlot`: vaga de 30 minutos, monitor, disciplina, início e capacidade.
+  O conteúdo da dúvida não pertence à vaga.
+- `Booking`: reserva com aluno, vaga, conteúdo obrigatório da dúvida (`question`)
+  e data de criação. O conteúdo será consultável pelos alunos da mesma vaga.
+- `ScheduleRepository`: contrato da agenda; `InMemoryScheduleRepository` é o
+  adaptador provisório. Ives implementará o adaptador SQLite.
+- `ScheduleService.create_slot(actor, subject, starts_at, capacity=1)` publica
+  uma vaga própria do monitor, validando capacidade e conflitos de horário.
+- `ScheduleService.list_slots(subject=None)` consulta a agenda futura publicada.
+  A filtragem por capacidade restante (CA1) depende da integração com reservas.
+- Futuro `BookingService.book(student, slot_id, question)`: valida e registra a
+  reserva. Recusa vaga inexistente, lotação, conteúdo vazio e limite semanal.
+
+**CA5 adicional:** o limite semanal é configurável, com padrão de duas reservas
+por aluno/disciplina na semana da vaga (segunda a domingo). Recusar uma terceira
+reserva nessa semana; aceitar em outra semana ou disciplina, havendo capacidade.
+Este critério é independente do CA4, que trata do conteúdo da dúvida.
+
+Testes futuros de reservas: `test_booking_consumes_capacity`,
+`test_full_slot_rejected`, `test_unknown_slot_rejected`,
+`test_question_required`, `test_question_visible_to_slot_students`,
+`test_weekly_limit_rejected`, `test_other_week_allowed` e
+`test_other_subject_allowed`. Esses testes cabem à etapa de reservas de Ives.
+A falta de resposta do monitor não integra os critérios de reservas desta etapa.
+
+Os testes já implementados em `tests/` verificam a parte de Gabriel: agenda,
+perfis, permissões e fluxo do terminal. Ainda não comprovam CA1–CA5 integrados.
