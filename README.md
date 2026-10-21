@@ -1,24 +1,35 @@
 # Agendamento de monitorias
 
-Projeto de Engenharia de Software — Gabriel Oliveira de Jesus e Ives Yudy
-Omura Maruiti. Python 3.10 ou superior, interface de terminal, sem dependências
-externas nesta etapa.
+Aplicação de terminal em Python 3.10+, com SQLite e testes `unittest`.
+Não requer pacotes externos.
 
 ## Executar
 
-Na raiz do repositório:
+Na raiz do projeto:
 
 ```bash
 python3 -m monitoring
 ```
 
-Selecione o monitor para publicar uma vaga (disciplina, data/hora e capacidade).
-Troque para aluno ou ADMIN para consultar a mesma agenda por disciplina.
-Datas usam `AAAA-MM-DD HH:MM`, no horário local da aplicação.
+O banco `monitoring.sqlite3` é criado no diretório atual e preservado ao sair.
+A seleção de perfis é demonstrativa, sem login ou autenticação real.
+Datas usam `AAAA-MM-DD HH:MM`, no horário local, sem fuso.
 
-Esta versão usa memória: os dados são perdidos ao encerrar. A seleção de usuário
-é demonstrativa e não constitui autenticação. O menu informa capacidade total,
-sem calcular lugares restantes. Reservas ainda não estão disponíveis.
+- MONITOR publica vagas próprias de 30 minutos, com disciplina e capacidade.
+- A consulta mostra horários futuros com capacidade restante.
+- STUDENT reserva informando o id da vaga e o conteúdo da dúvida.
+- Minhas reservas mostra os registros autorizados para cada perfil, inclusive cancelados.
+- Cancelar reserva exige pelo menos 72 horas de antecedência. Alunos cancelam
+  reservas próprias; monitores cancelam reservas de suas vagas. Fora do prazo,
+  ADMIN pode cancelar um atendimento futuro com justificativa obrigatória.
+- Avisos mostra as notificações internas de cancelamento para aluno e monitor.
+- Dúvidas da vaga permite consultar os conteúdos aos participantes ativos,
+  ao monitor responsável e ao ADMIN.
+
+Cada aluno pode manter até duas reservas ativas por disciplina na mesma semana
+(segunda a domingo). O limite pode ser configurado no construtor de
+`BookingService(weekly_limit=...)`. Reservas canceladas deixam de consumir
+capacidade e limite. Reservas duplicadas ativas são recusadas.
 
 ## Testar
 
@@ -26,44 +37,29 @@ sem calcular lugares restantes. Reservas ainda não estão disponíveis.
 python3 -m unittest discover -v
 ```
 
-## Estrutura e responsabilidades
+A suíte usa bancos temporários e em memória, sem alterar o banco da aplicação.
+Inclui reabertura de banco, disputa por uma única vaga, permissões, limite semanal,
+fronteira das 72 horas, avisos e fluxo completo no terminal.
+
+## Estrutura
 
 | Arquivo | Responsabilidade |
 | --- | --- |
-| `monitoring/models.py` | `Role`, `User`, `AppointmentSlot` |
-| `monitoring/schedule.py` | Permissões, criação, conflitos e consulta de agenda |
-| `monitoring/repository.py` | Contrato de persistência e adaptador em memória |
-| `monitoring/cli.py` | Entrada e saída do terminal |
-| `tests/` | Testes de regras e fluxos do terminal |
+| `monitoring/models.py` | Perfis, usuários, vagas, reservas e avisos |
+| `monitoring/schedule.py` | Publicação de vagas, conflitos e agenda |
+| `monitoring/repository.py` | Contrato de agenda e adaptador em memória |
+| `monitoring/sqlite_repository.py` | SQL, persistência e transações |
+| `monitoring/bookings.py` | Reservas, limites, cancelamentos e acesso às dúvidas |
+| `monitoring/cli.py` | Menus e entrada/saída do terminal |
+| `tests/` | Regras e integração |
 
-Gabriel: perfis e agenda. Ives: SQLite e reservas. Cancelamentos, histórico,
-presença, feedback e relatórios pertencem às etapas seguintes do cronograma.
+Validação e gravação de reservas/cancelamentos usam transações `BEGIN IMMEDIATE`.
+Cancelamentos preservam o histórico e salvam os avisos na mesma transação.
+A agenda base consulta horários publicados; `BookingService.list_available_slots`
+aplica o filtro de capacidade restante.
 
-## Continuação para Ives
+Histórico de presença, penalidades por faltas, feedback e relatórios de bolsas
+continuam fora desta versão. Os avisos são internos, sem envio por e-mail.
 
-Implemente `SQLiteScheduleRepository` respeitando este contrato:
-
-```python
-list_slots() -> list[AppointmentSlot]
-add_slot(monitor_id: int, subject: str, starts_at: datetime,
-         capacity: int) -> AppointmentSlot
-```
-
-`add_slot` gera um id único. `list_slots` retorna todas as vagas, inclusive
-passadas; `ScheduleService` filtra e ordena a consulta. Preserve `datetime`
-local sem fuso e ids estáveis. Injete o adaptador ao criar
-`ScheduleService(repository)`; a interface aceita `run(service)`.
-
-Adicione o modelo `Booking` com `student_id`, `slot_id`, `question` e
-`created_at`, e um `BookingService.book(student, slot_id, question)`.
-Valide perfil STUDENT, vaga existente, dúvida preenchida, capacidade e limite
-semanal configurável (padrão 2 por aluno/disciplina, segunda a domingo).
-O conteúdo da dúvida pertence à reserva; alunos da mesma vaga poderão vê-lo.
-
-Persistência e checagem da capacidade/limite precisam ocorrer em transação.
-Inclua testes SQLite em memória e reabertura de banco em arquivo. Acrescente
-uma consulta de vagas com lugares restantes; `ScheduleService.list_slots`
-apenas consulta horários futuros publicados.
-
-
-Veja [o plano e as decisões](docs/implementation-plan.md).
+Documentação: [decisões iniciais](docs/implementation-plan.md) e
+[reservas e cancelamentos](docs/booking-plan.md).

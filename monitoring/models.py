@@ -27,3 +27,23 @@ class AppointmentSlot:
     @property
     def ends_at(self) -> datetime:
         return self.starts_at + timedelta(minutes=30)
+
+
+@dataclass(frozen=True)
+class Booking:
+    id: int
+    student_id: int
+    slot_id: int
+    question: str
+    created_at: datetime
+    status: str
+    cancelled_at: datetime | None = None
+    cancellation_reason: str | None = None
+
+
+@dataclass(frozen=True)
+class Notification:
+    id: int
+    user_id: int
+    message: str
+    created_at: datetime

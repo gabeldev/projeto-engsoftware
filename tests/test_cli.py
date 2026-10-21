@@ -37,3 +37,23 @@ class TerminalTests(unittest.TestCase):
         self.assertIn('Erro:', output)
         output = self.execute([EOFError()])
         self.assertIn('Encerrado', output)
+
+
+class PersistentTerminalTests(unittest.TestCase):
+    def test_booking_cancellation_and_notifications(self):
+        from monitoring.bookings import BookingService
+        from monitoring.sqlite_repository import SQLiteScheduleRepository
+        from monitoring.models import User, Role
+        with SQLiteScheduleRepository(':memory:') as repo:
+            clock = lambda: datetime(2026, 10, 19)
+            schedule = ScheduleService(repo, clock=clock)
+            schedule.create_slot(User(2, 'Monitor', Role.MONITOR), 'Calculus', datetime(2026, 10, 25, 14), 1)
+            bookings = BookingService(repo, clock=clock)
+            answers = ['3', '3', '1', 'Derivadas', '4', '5', '1', 'Outro compromisso',
+                       '6', '0', '0']
+            with patch('builtins.input', side_effect=answers), patch('sys.stdout', new_callable=StringIO) as output:
+                run(schedule, bookings)
+            self.assertIn('Reserva criada', output.getvalue())
+            self.assertIn('Reserva cancelada', output.getvalue())
+            self.assertIn('Outro compromisso', output.getvalue())
+            self.assertEqual(repo.list_bookings()[0].status, 'CANCELLED')
