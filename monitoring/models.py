@@ -47,3 +47,21 @@ class Notification:
     user_id: int
     message: str
     created_at: datetime
+
+class RequestStatus(str, Enum):
+    PENDING = 'PENDING'
+    APPROVED = 'APPROVED'
+    REJECTED = 'REJECTED'
+
+
+@dataclass(frozen=True)
+class ExceptionRequest:
+    id: int
+    booking_id: int
+    requester_id: int
+    reason: str
+    status: RequestStatus
+    created_at: datetime
+    decided_by: int | None = None
+    decided_at: datetime | None = None
+    decision_note: str = ''

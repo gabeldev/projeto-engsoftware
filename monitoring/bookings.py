@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from typing import Callable
 
-from monitoring.models import Role, User
+from monitoring.models import RequestStatus, Role, User
 from monitoring.schedule import PermissionDeniedError
 from monitoring.sqlite_repository import SQLiteScheduleRepository
 
@@ -85,9 +85,12 @@ class BookingService:
                 raise ValueError('O atendimento já iniciou.')
             reason = reason.strip()
             if slot.starts_at - now < timedelta(hours=72):
-                if actor.role != Role.ADMIN:
-                    raise ValueError('Cancelamento exige pelo menos 72 horas de antecedência. Procure o ADMIN.')
-                if not reason:
+                approved = self.repository.list_exception_requests(
+                    status=RequestStatus.APPROVED, booking_id=booking_id)
+                if actor.role != Role.ADMIN and not approved:
+                    raise ValueError('Cancelamento exige pelo menos 72 horas de antecedência. '
+                                     'Peça uma exceção ao ADMIN.')
+                if actor.role == Role.ADMIN and not reason:
                     raise ValueError('Informe a justificativa da exceção.')
             cancelled = self.repository.cancel_booking(booking_id, now, reason)
             message = (f'Reserva #{booking_id} de {slot.subject}, {slot.starts_at:%Y-%m-%d %H:%M}, '

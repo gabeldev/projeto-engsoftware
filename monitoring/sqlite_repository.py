@@ -3,8 +3,10 @@ import sqlite3
 from contextlib import contextmanager
 from datetime import datetime
 
-from monitoring.models import AppointmentSlot, Booking, Notification
-
+from monitoring.errors import RequestStateError
+from monitoring.models import (
+    AppointmentSlot, Booking, ExceptionRequest, Notification, RequestStatus,
+)
 
 class SQLiteScheduleRepository:
     def __init__(self, path: str = 'monitoring.sqlite3'):
@@ -37,6 +39,20 @@ class SQLiteScheduleRepository:
                 message TEXT NOT NULL,
                 created_at TEXT NOT NULL
             );
+                        CREATE TABLE IF NOT EXISTS exception_requests (
+                id INTEGER PRIMARY KEY,
+                booking_id INTEGER NOT NULL REFERENCES bookings(id),
+                requester_id INTEGER NOT NULL,
+                reason TEXT NOT NULL CHECK(length(trim(reason)) > 0),
+                status TEXT NOT NULL DEFAULT 'PENDING'
+                    CHECK(status IN ('PENDING', 'APPROVED', 'REJECTED')),
+                created_at TEXT NOT NULL,
+                decided_by INTEGER,
+                decided_at TEXT,
+                decision_note TEXT NOT NULL DEFAULT ''
+            );
+            CREATE UNIQUE INDEX IF NOT EXISTS open_exception
+            ON exception_requests(booking_id) WHERE status IN ('PENDING', 'APPROVED');
         ''')
 
     @contextmanager
@@ -116,3 +132,57 @@ class SQLiteScheduleRepository:
                              datetime.fromisoformat(row['created_at']))
                 for row in self.connection.execute(
                     'SELECT * FROM notifications WHERE user_id = ? ORDER BY id', (user_id,))]
+    
+    @staticmethod
+    def _request(row):
+        return ExceptionRequest(
+            row['id'], row['booking_id'], row['requester_id'], row['reason'],
+            RequestStatus(row['status']), datetime.fromisoformat(row['created_at']),
+            row['decided_by'],
+            datetime.fromisoformat(row['decided_at']) if row['decided_at'] else None,
+            row['decision_note'])
+
+    def add_exception_request(self, booking_id, requester_id, reason, created_at):
+        """Chamar dentro de `transaction()`: a checagem e o INSERT são atômicos."""
+        open_request = self.connection.execute(
+            "SELECT 1 FROM exception_requests WHERE booking_id = ? "
+            "AND status IN ('PENDING', 'APPROVED')", (booking_id,)).fetchone()
+        if open_request:
+            raise RequestStateError(
+                'Já existe solicitação pendente ou aprovada para esta reserva.')
+        cursor = self.connection.execute(
+            'INSERT INTO exception_requests(booking_id, requester_id, reason, created_at) '
+            'VALUES (?, ?, ?, ?)',
+            (booking_id, requester_id, reason, created_at.isoformat()))
+        return self.get_exception_request(cursor.lastrowid)
+
+    def get_exception_request(self, request_id):
+        row = self.connection.execute('SELECT * FROM exception_requests WHERE id = ?',
+                                      (request_id,)).fetchone()
+        if row is None:
+            raise ValueError('Solicitação inexistente.')
+        return self._request(row)
+
+    def list_exception_requests(self, status=None, booking_id=None):
+        clauses, params = [], []
+        if status is not None:
+            clauses.append('status = ?')
+            params.append(RequestStatus(status).value)
+        if booking_id is not None:
+            clauses.append('booking_id = ?')
+            params.append(booking_id)
+        where = f' WHERE {" AND ".join(clauses)}' if clauses else ''
+        rows = self.connection.execute(
+            f'SELECT * FROM exception_requests{where} ORDER BY id', params)
+        return [self._request(row) for row in rows]
+
+    def decide_exception_request(self, request_id, status, decided_by, decided_at, note):
+        """Só decide solicitações PENDING. Chamar dentro de `transaction()`."""
+        request = self.get_exception_request(request_id)
+        if request.status != RequestStatus.PENDING:
+            raise RequestStateError('A solicitação já foi analisada.')
+        self.connection.execute(
+            'UPDATE exception_requests SET status = ?, decided_by = ?, decided_at = ?, '
+            'decision_note = ? WHERE id = ?',
+            (RequestStatus(status).value, decided_by, decided_at.isoformat(), note, request_id))
+        return self.get_exception_request(request_id)

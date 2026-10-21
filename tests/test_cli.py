@@ -57,3 +57,43 @@ class PersistentTerminalTests(unittest.TestCase):
             self.assertIn('Reserva cancelada', output.getvalue())
             self.assertIn('Outro compromisso', output.getvalue())
             self.assertEqual(repo.list_bookings()[0].status, 'CANCELLED')
+
+
+class ExceptionTerminalTests(unittest.TestCase):
+    def test_student_requests_admin_approves_student_cancels(self):
+        from monitoring.bookings import BookingService
+        from monitoring.exception_requests import ExceptionRequestService
+        from monitoring.models import Role, User
+        from monitoring.sqlite_repository import SQLiteScheduleRepository
+        with SQLiteScheduleRepository(':memory:') as repo:
+            clock = lambda: datetime(2026, 10, 19)
+            schedule = ScheduleService(repo, clock=clock)
+            schedule.create_slot(User(2, 'Monitor', Role.MONITOR), 'Calculus', datetime(2026, 10, 20, 14), 1)
+            bookings = BookingService(repo, clock=clock)
+            exceptions = ExceptionRequestService(repo, admin_ids=[1], clock=clock)
+            answers = ['3', '3', '1', 'Derivadas',
+                       '5', '1', '',            # recusado: menos de 72 h
+                       '8', '1', 'Consulta', '0',
+                       '1', '6', '9', '1', 'A', 'Ok', '0',
+                       '3', '6', '5', '1', 'Consulta', '0', '0']
+            with patch('builtins.input', side_effect=answers), patch('sys.stdout', new_callable=StringIO) as output:
+                run(schedule, bookings, exceptions)
+            text = output.getvalue()
+            self.assertIn('Cancelamento exige pelo menos 72 horas', text)
+            self.assertIn('Solicitação #1 enviada', text)
+            self.assertIn('Nova solicitação de exceção #1', text)
+            self.assertIn('Exceção aprovada', text)
+            self.assertIn('Reserva cancelada', text)
+            self.assertEqual(repo.list_bookings()[0].status, 'CANCELLED')
+
+    def test_only_admin_reviews(self):
+        from monitoring.bookings import BookingService
+        from monitoring.exception_requests import ExceptionRequestService
+        from monitoring.sqlite_repository import SQLiteScheduleRepository
+        with SQLiteScheduleRepository(':memory:') as repo:
+            schedule = ScheduleService(repo)
+            with patch('builtins.input', side_effect=['3', '9', '0', '1', '9', '0', '0']), \
+                    patch('sys.stdout', new_callable=StringIO) as output:
+                run(schedule, BookingService(repo), ExceptionRequestService(repo, admin_ids=[1]))
+            self.assertIn('Somente o ADMIN', output.getvalue())
+            self.assertIn('Nenhuma solicitação pendente', output.getvalue())

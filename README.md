@@ -22,6 +22,7 @@ Datas usam `AAAA-MM-DD HH:MM`, no horário local, sem fuso.
 - Cancelar reserva exige pelo menos 72 horas de antecedência. Alunos cancelam
   reservas próprias; monitores cancelam reservas de suas vagas. Fora do prazo,
   ADMIN pode cancelar um atendimento futuro com justificativa obrigatória.
+- Pedir exceção (aluno da reserva ou monitor da vaga): dentro das 72 horas, o pedido com motivo vai para o ADMIN. Analisar exceções (ADMIN) aprova ou recusa uma única vez; recusar exige justificativa. Com a exceção aprovada, quem pediu consegue cancelar a reserva normalmente (opção 5).
 - Avisos mostra as notificações internas de cancelamento para aluno e monitor.
 - Dúvidas da vaga permite consultar os conteúdos aos participantes ativos,
   ao monitor responsável e ao ADMIN.
@@ -50,6 +51,8 @@ fronteira das 72 horas, avisos e fluxo completo no terminal.
 | `monitoring/repository.py` | Contrato de agenda e adaptador em memória |
 | `monitoring/sqlite_repository.py` | SQL, persistência e transações |
 | `monitoring/bookings.py` | Reservas, limites, cancelamentos e acesso às dúvidas |
+| `monitoring/exception_requests.py` | Pedido e análise (ADMIN) de exceções à regra das 72 h |
+| `monitoring/errors.py` | Erros de solicitação duplicada/já analisada e exceção desnecessária |
 | `monitoring/cli.py` | Menus e entrada/saída do terminal |
 | `tests/` | Regras e integração |
 
