@@ -84,3 +84,16 @@ A presença registrada não pode ser alterada. Os avisos são internos, sem envi
 Documentação: [decisões iniciais](docs/implementation-plan.md) e
 [reservas e cancelamentos](docs/booking-plan.md) e
 [cobertura dos testes](docs/testes.md).
+
+## Entrega local
+
+- [Cinco histórias e critérios](docs/historias.md).
+- [Relatório de execução](docs/relatorio-execucao.md).
+- [Documentação final](docs/documentacao-final.md).
+- [PDF consolidado](docs/entrega-final.pdf).
+- [Plano da Parte 1](docs/parte-1.pdf).
+
+O escopo inicial e os planos são registros históricos; o README e a documentação
+final descrevem a versão atual. O pacote ZIP fica em `delivery/`.
+
+Versão editável do PDF final: [Google Docs](https://docs.google.com/document/d/1xzeYDJs_Gif8U1Isytb7RbIfb-RA2aUR-wITXdOeQGg/edit?usp=drivesdk).

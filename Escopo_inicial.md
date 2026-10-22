@@ -66,7 +66,7 @@ ambiguidades das responsabilidades descritas acima:
 - `Booking`: reserva com aluno, vaga, conteúdo obrigatório da dúvida (`question`)
   e data de criação. O conteúdo será consultável pelos alunos da mesma vaga.
 - `ScheduleRepository`: contrato da agenda; `InMemoryScheduleRepository` é o
-  adaptador provisório. Ives implementará o adaptador SQLite.
+  adaptador provisório. Implementaremos o adaptador SQLite.
 - `ScheduleService.create_slot(actor, subject, starts_at, capacity=1)` publica
   uma vaga própria do monitor, validando capacidade e conflitos de horário.
 - `ScheduleService.list_slots(subject=None)` consulta a agenda futura publicada.
@@ -83,8 +83,8 @@ Testes futuros de reservas: `test_booking_consumes_capacity`,
 `test_full_slot_rejected`, `test_unknown_slot_rejected`,
 `test_question_required`, `test_question_visible_to_slot_students`,
 `test_weekly_limit_rejected`, `test_other_week_allowed` e
-`test_other_subject_allowed`. Esses testes cabem à etapa de reservas de Ives.
+`test_other_subject_allowed`. Implementaremos esses testes na etapa de reservas.
 A falta de resposta do monitor não integra os critérios de reservas desta etapa.
 
-Os testes já implementados em `tests/` verificam a parte de Gabriel: agenda,
+Os testes já implementados em `tests/` verificam inicialmente agenda,
 perfis, permissões e fluxo do terminal. Ainda não comprovam CA1–CA5 integrados.

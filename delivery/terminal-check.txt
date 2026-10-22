@@ -1,0 +1,68 @@
+Monitorias — agenda e reservas.
+Seleção de perfis demonstrativa, sem autenticação.
+
+1 ADMIN | 2 MONITOR | 3 STUDENT | 0 Sair
+Usuário: 
+Monitor (MONITOR)
+1 Publicar vaga | 2 Consultar agenda | 0 Trocar usuário
+3 Reservar | 4 Minhas reservas | 5 Cancelar reserva | 6 Avisos | 7 Dúvidas da vaga
+8 Pedir exceção de cancelamento | 9 Analisar exceções (ADMIN)
+10 Avaliar atendimento | 11 Ver avaliações
+12 Relatório mensal de horas (ADMIN) | 13 Dúvidas por disciplina (ADMIN)
+14 Registrar presença (MONITOR/ADMIN) | 15 Histórico e faltas
+Opção: Disciplina: Início (AAAA-MM-DD HH:MM): Capacidade: Vaga criada: 1.
+
+Monitor (MONITOR)
+1 Publicar vaga | 2 Consultar agenda | 0 Trocar usuário
+3 Reservar | 4 Minhas reservas | 5 Cancelar reserva | 6 Avisos | 7 Dúvidas da vaga
+8 Pedir exceção de cancelamento | 9 Analisar exceções (ADMIN)
+10 Avaliar atendimento | 11 Ver avaliações
+12 Relatório mensal de horas (ADMIN) | 13 Dúvidas por disciplina (ADMIN)
+14 Registrar presença (MONITOR/ADMIN) | 15 Histórico e faltas
+Opção: 
+1 ADMIN | 2 MONITOR | 3 STUDENT | 0 Sair
+Usuário: 
+Aluno (STUDENT)
+1 Publicar vaga | 2 Consultar agenda | 0 Trocar usuário
+3 Reservar | 4 Minhas reservas | 5 Cancelar reserva | 6 Avisos | 7 Dúvidas da vaga
+8 Pedir exceção de cancelamento | 9 Analisar exceções (ADMIN)
+10 Avaliar atendimento | 11 Ver avaliações
+12 Relatório mensal de horas (ADMIN) | 13 Dúvidas por disciplina (ADMIN)
+14 Registrar presença (MONITOR/ADMIN) | 15 Histórico e faltas
+Opção: Vaga: Conteúdo da dúvida: Reserva criada: 1.
+
+Aluno (STUDENT)
+1 Publicar vaga | 2 Consultar agenda | 0 Trocar usuário
+3 Reservar | 4 Minhas reservas | 5 Cancelar reserva | 6 Avisos | 7 Dúvidas da vaga
+8 Pedir exceção de cancelamento | 9 Analisar exceções (ADMIN)
+10 Avaliar atendimento | 11 Ver avaliações
+12 Relatório mensal de horas (ADMIN) | 13 Dúvidas por disciplina (ADMIN)
+14 Registrar presença (MONITOR/ADMIN) | 15 Histórico e faltas
+Opção: 
+1 ADMIN | 2 MONITOR | 3 STUDENT | 0 Sair
+Usuário: 
+REABERTURA
+Monitorias — agenda e reservas.
+Seleção de perfis demonstrativa, sem autenticação.
+
+1 ADMIN | 2 MONITOR | 3 STUDENT | 0 Sair
+Usuário: 
+Aluno (STUDENT)
+1 Publicar vaga | 2 Consultar agenda | 0 Trocar usuário
+3 Reservar | 4 Minhas reservas | 5 Cancelar reserva | 6 Avisos | 7 Dúvidas da vaga
+8 Pedir exceção de cancelamento | 9 Analisar exceções (ADMIN)
+10 Avaliar atendimento | 11 Ver avaliações
+12 Relatório mensal de horas (ADMIN) | 13 Dúvidas por disciplina (ADMIN)
+14 Registrar presença (MONITOR/ADMIN) | 15 Histórico e faltas
+Opção: #1 | vaga 1 | ACTIVE | Derivadas
+
+Aluno (STUDENT)
+1 Publicar vaga | 2 Consultar agenda | 0 Trocar usuário
+3 Reservar | 4 Minhas reservas | 5 Cancelar reserva | 6 Avisos | 7 Dúvidas da vaga
+8 Pedir exceção de cancelamento | 9 Analisar exceções (ADMIN)
+10 Avaliar atendimento | 11 Ver avaliações
+12 Relatório mensal de horas (ADMIN) | 13 Dúvidas por disciplina (ADMIN)
+14 Registrar presença (MONITOR/ADMIN) | 15 Histórico e faltas
+Opção: 
+1 ADMIN | 2 MONITOR | 3 STUDENT | 0 Sair
+Usuário: 

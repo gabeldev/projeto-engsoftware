@@ -1,0 +1,105 @@
+test_absence_warns_the_student_only (tests.test_attendance.AttendanceTests.test_absence_warns_the_student_only) ... ok
+test_absences_count_across_subjects_but_reset_each_semester (tests.test_attendance.AttendanceTests.test_absences_count_across_subjects_but_reset_each_semester) ... ok
+test_cancelled_booking_has_no_attendance (tests.test_attendance.AttendanceTests.test_cancelled_booking_has_no_attendance) ... ok
+test_history_lists_everything_with_attendance_and_respects_visibility (tests.test_attendance.AttendanceTests.test_history_lists_everything_with_attendance_and_respects_visibility) ... ok
+test_history_survives_reopening_the_database_file (tests.test_attendance.AttendanceTests.test_history_survives_reopening_the_database_file) ... ok
+test_monitor_marks_present_and_admin_can_mark_too (tests.test_attendance.AttendanceTests.test_monitor_marks_present_and_admin_can_mark_too) ... ok
+test_only_the_slot_monitor_or_admin_may_mark (tests.test_attendance.AttendanceTests.test_only_the_slot_monitor_or_admin_may_mark) ... ok
+test_pending_attendance_by_profile (tests.test_attendance.AttendanceTests.test_pending_attendance_by_profile) ... ok
+test_presence_and_other_students_do_not_count (tests.test_attendance.AttendanceTests.test_presence_and_other_students_do_not_count) ... ok
+test_semester_absences_permissions (tests.test_attendance.AttendanceTests.test_semester_absences_permissions) ... ok
+test_semester_helpers (tests.test_attendance.AttendanceTests.test_semester_helpers) ... ok
+test_third_absence_in_semester_warns_student_and_all_admins_once (tests.test_attendance.AttendanceTests.test_third_absence_in_semester_warns_student_and_all_admins_once) ... ok
+test_validation_rules (tests.test_attendance.AttendanceTests.test_validation_rules) ... ok
+test_concurrent_connections_do_not_overbook (tests.test_bookings.BookingIntegrationTests.test_concurrent_connections_do_not_overbook) ... ok
+test_configurable_limit_and_other_subject (tests.test_bookings.BookingIntegrationTests.test_configurable_limit_and_other_subject) ... ok
+test_monitor_ownership_and_failed_cancellation_has_no_side_effects (tests.test_bookings.BookingIntegrationTests.test_monitor_ownership_and_failed_cancellation_has_no_side_effects) ... ok
+test_booking_persists_and_consumes_capacity (tests.test_bookings.BookingTests.test_booking_persists_and_consumes_capacity) ... ok
+test_cancellation_releases_capacity_and_notifies (tests.test_bookings.BookingTests.test_cancellation_releases_capacity_and_notifies) ... ok
+test_deadline_boundary_and_admin_exception (tests.test_bookings.BookingTests.test_deadline_boundary_and_admin_exception) ... ok
+test_exactly_seventy_two_hours_allowed (tests.test_bookings.BookingTests.test_exactly_seventy_two_hours_allowed) ... ok
+test_file_persistence (tests.test_bookings.BookingTests.test_file_persistence) ... ok
+test_ownership_and_question_visibility (tests.test_bookings.BookingTests.test_ownership_and_question_visibility) ... ok
+test_started_slot_rejected (tests.test_bookings.BookingTests.test_started_slot_rejected) ... ok
+test_validation_and_duplicates (tests.test_bookings.BookingTests.test_validation_and_duplicates) ... ok
+test_weekly_limit_and_next_week (tests.test_bookings.BookingTests.test_weekly_limit_and_next_week) ... ok
+test_none_cancellation_reason_is_treated_as_empty (tests.test_bookings.InvalidInputTests.test_none_cancellation_reason_is_treated_as_empty) ... ok
+test_none_question_is_a_clear_error_not_a_crash (tests.test_bookings.InvalidInputTests.test_none_question_is_a_clear_error_not_a_crash) ... ok
+test_unknown_booking_cancellation_is_a_clear_error (tests.test_bookings.InvalidInputTests.test_unknown_booking_cancellation_is_a_clear_error) ... ok
+test_monitor_marks_absences_and_third_one_alerts_admin_and_student (tests.test_cli.AttendanceTerminalTests.test_monitor_marks_absences_and_third_one_alerts_admin_and_student) ... ok
+test_presence_input_errors_recover (tests.test_cli.AttendanceTerminalTests.test_presence_input_errors_recover) ... ok
+test_only_admin_reviews (tests.test_cli.ExceptionTerminalTests.test_only_admin_reviews) ... ok
+test_student_requests_admin_approves_student_cancels (tests.test_cli.ExceptionTerminalTests.test_student_requests_admin_approves_student_cancels) ... ok
+test_permissions_and_invalid_input_recover (tests.test_cli.FeedbackAndReportTerminalTests.test_permissions_and_invalid_input_recover) ... ok
+test_student_rates_and_admin_reads_reports (tests.test_cli.FeedbackAndReportTerminalTests.test_student_rates_and_admin_reads_reports) ... ok
+test_booking_cancellation_and_notifications (tests.test_cli.PersistentTerminalTests.test_booking_cancellation_and_notifications) ... ok
+test_invalid_date_recovers_and_eof_exits (tests.test_cli.TerminalTests.test_invalid_date_recovers_and_eof_exits) ... ok
+test_monitor_publishes_and_student_consults_same_schedule (tests.test_cli.TerminalTests.test_monitor_publishes_and_student_consults_same_schedule) ... ok
+test_student_cannot_publish_and_invalid_input_recovers (tests.test_cli.TerminalTests.test_student_cannot_publish_and_invalid_input_recovers) ... ok
+test_consome_vaga (tests.test_criteria.AcceptanceCriteriaTests.test_consome_vaga)
+Teste_Consome_Vaga (CA2) ... ok
+test_consumo_inexistente (tests.test_criteria.AcceptanceCriteriaTests.test_consumo_inexistente)
+Teste_Consumo_Inexistente (CA2, falha) ... ok
+test_ementa_feita (tests.test_criteria.AcceptanceCriteriaTests.test_ementa_feita)
+Teste_Ementa_Feita (CA4) ... ok
+test_erro_reserva (tests.test_criteria.AcceptanceCriteriaTests.test_erro_reserva)
+Teste_Erro_Reserva (CA3, falha) ... ok
+test_limite_semanal (tests.test_criteria.AcceptanceCriteriaTests.test_limite_semanal)
+Teste_Limite_Semanal (CA5) ... ok
+test_limite_semanal_aceita_outra_semana_ou_disciplina (tests.test_criteria.AcceptanceCriteriaTests.test_limite_semanal_aceita_outra_semana_ou_disciplina)
+Teste_Limite_Semanal_Aceita (CA5, sucesso) ... ok
+test_lista_disponivel (tests.test_criteria.AcceptanceCriteriaTests.test_lista_disponivel)
+Teste_Lista_Disponivel (CA1) ... ok
+test_lista_vazia (tests.test_criteria.AcceptanceCriteriaTests.test_lista_vazia)
+Teste_Lista_Vazia (CA1, falha) ... ok
+test_recusa_reserva (tests.test_criteria.AcceptanceCriteriaTests.test_recusa_reserva)
+Teste_Recusa_Reserva (CA3) ... ok
+test_sem_ementa (tests.test_criteria.AcceptanceCriteriaTests.test_sem_ementa)
+Teste_Sem_Ementa (CA4, falha) ... ok
+test_admin_direct_cancellation_still_requires_reason (tests.test_exceptions.ExceptionRequestTests.test_admin_direct_cancellation_still_requires_reason) ... ok
+test_approval_is_per_booking (tests.test_exceptions.ExceptionRequestTests.test_approval_is_per_booking) ... ok
+test_approve_fails_when_booking_already_cancelled (tests.test_exceptions.ExceptionRequestTests.test_approve_fails_when_booking_already_cancelled) ... ok
+test_approve_notifies_involved_and_enables_cancellation (tests.test_exceptions.ExceptionRequestTests.test_approve_notifies_involved_and_enables_cancellation) ... ok
+test_duplicate_request_rejected_until_rejected (tests.test_exceptions.ExceptionRequestTests.test_duplicate_request_rejected_until_rejected) ... ok
+test_monitor_of_the_slot_can_request (tests.test_exceptions.ExceptionRequestTests.test_monitor_of_the_slot_can_request) ... ok
+test_not_needed_with_notice_and_after_start_or_cancellation (tests.test_exceptions.ExceptionRequestTests.test_not_needed_with_notice_and_after_start_or_cancellation) ... ok
+test_only_admin_decides_and_only_once (tests.test_exceptions.ExceptionRequestTests.test_only_admin_decides_and_only_once) ... ok
+test_reject_requires_note_and_keeps_cancellation_blocked (tests.test_exceptions.ExceptionRequestTests.test_reject_requires_note_and_keeps_cancellation_blocked) ... ok
+test_request_validations_leave_no_side_effects (tests.test_exceptions.ExceptionRequestTests.test_request_validations_leave_no_side_effects) ... ok
+test_requests_survive_reopening_file (tests.test_exceptions.ExceptionRequestTests.test_requests_survive_reopening_file) ... ok
+test_rule_threshold_is_72_hours (tests.test_exceptions.ExceptionRequestTests.test_rule_threshold_is_72_hours) ... ok
+test_student_requests_and_admin_is_notified (tests.test_exceptions.ExceptionRequestTests.test_student_requests_and_admin_is_notified) ... ok
+test_cancelled_unknown_and_duplicate_are_rejected (tests.test_feedback.FeedbackTests.test_cancelled_unknown_and_duplicate_are_rejected) ... ok
+test_cannot_submit_before_the_session_ends (tests.test_feedback.FeedbackTests.test_cannot_submit_before_the_session_ends) ... ok
+test_comment_is_optional (tests.test_feedback.FeedbackTests.test_comment_is_optional) ... ok
+test_feedback_survives_reopening_the_database_file (tests.test_feedback.FeedbackTests.test_feedback_survives_reopening_the_database_file) ... ok
+test_invalid_ratings_and_long_comment_are_rejected_without_saving (tests.test_feedback.FeedbackTests.test_invalid_ratings_and_long_comment_are_rejected_without_saving) ... ok
+test_only_students_marked_present_can_rate (tests.test_feedback.FeedbackTests.test_only_students_marked_present_can_rate) ... ok
+test_only_the_booking_student_can_submit (tests.test_feedback.FeedbackTests.test_only_the_booking_student_can_submit) ... ok
+test_pending_lists_only_finished_active_unrated_bookings (tests.test_feedback.FeedbackTests.test_pending_lists_only_finished_active_unrated_bookings) ... ok
+test_student_submits_after_session_and_everyone_authorized_sees_it (tests.test_feedback.FeedbackTests.test_student_submits_after_session_and_everyone_authorized_sees_it) ... ok
+test_allowed_users_are_not_blocked_by_permissions (tests.test_permissions.PermissionMatrixTests.test_allowed_users_are_not_blocked_by_permissions) ... ok
+test_denied_attempts_leave_no_trace (tests.test_permissions.PermissionMatrixTests.test_denied_attempts_leave_no_trace) ... ok
+test_denied_users_are_blocked (tests.test_permissions.PermissionMatrixTests.test_denied_users_are_blocked) ... ok
+test_every_operation_classifies_each_user_exactly_once (tests.test_permissions.PermissionMatrixTests.test_every_operation_classifies_each_user_exactly_once) ... ok
+test_visibility_of_bookings_and_feedback_by_profile (tests.test_permissions.PermissionMatrixTests.test_visibility_of_bookings_and_feedback_by_profile) ... ok
+test_empty_slot_gives_zero_hours_and_future_slots_are_excluded (tests.test_reports.ReportTests.test_empty_slot_gives_zero_hours_and_future_slots_are_excluded) ... ok
+test_invalid_period_is_rejected (tests.test_reports.ReportTests.test_invalid_period_is_rejected) ... ok
+test_month_boundaries_and_december_rollover (tests.test_reports.ReportTests.test_month_boundaries_and_december_rollover) ... ok
+test_monthly_hours_counts_finished_slots_with_active_bookings (tests.test_reports.ReportTests.test_monthly_hours_counts_finished_slots_with_active_bookings) ... ok
+test_questions_are_grouped_by_subject_and_content (tests.test_reports.ReportTests.test_questions_are_grouped_by_subject_and_content) ... ok
+test_reports_are_admin_only (tests.test_reports.ReportTests.test_reports_are_admin_only) ... ok
+test_session_in_progress_is_not_counted_yet (tests.test_reports.ReportTests.test_session_in_progress_is_not_counted_yet) ... ok
+test_session_without_any_present_student_gives_zero_hours (tests.test_reports.ReportTests.test_session_without_any_present_student_gives_zero_hours) ... ok
+test_adjacent_slots_and_different_monitors_allowed (tests.test_schedule.ScheduleTests.test_adjacent_slots_and_different_monitors_allowed) ... ok
+test_invalid_fields_are_rejected (tests.test_schedule.ScheduleTests.test_invalid_fields_are_rejected) ... ok
+test_monitor_creates_thirty_minute_slot (tests.test_schedule.ScheduleTests.test_monitor_creates_thirty_minute_slot) ... ok
+test_other_roles_cannot_publish (tests.test_schedule.ScheduleTests.test_other_roles_cannot_publish) ... ok
+test_overlaps_rejected_even_across_subjects (tests.test_schedule.ScheduleTests.test_overlaps_rejected_even_across_subjects) ... ok
+test_query_filters_subject_orders_and_excludes_past (tests.test_schedule.ScheduleTests.test_query_filters_subject_orders_and_excludes_past) ... ok
+test_rejected_conflict_does_not_save_slot (tests.test_schedule.ScheduleTests.test_rejected_conflict_does_not_save_slot) ... ok
+
+----------------------------------------------------------------------
+Ran 90 tests in 0.347s
+
+OK

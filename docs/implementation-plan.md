@@ -1,4 +1,4 @@
-# Perfis e agenda — Gabriel
+# Perfis e agenda
 
 Aplicação de terminal em Python 3.10+, sem dependências externas. Identificadores
 em inglês; instruções e mensagens para o usuário em português.
@@ -12,9 +12,9 @@ em inglês; instruções e mensagens para o usuário em português.
   disciplina vazia e sobreposição para o mesmo monitor.
 - Horários locais sem fuso, com precisão de minuto. Intervalos adjacentes são válidos.
 - `ScheduleRepository` define o contrato; `InMemoryScheduleRepository` permite
-  executar a parte de Gabriel antes da implementação SQLite de Ives.
+  testar a agenda antes de integrarmos a persistência SQLite.
 - Selecionar usuário no terminal é uma simulação de perfil, sem autenticação.
-- Banco, reservas, lotação e limite semanal ficam com Ives. Consulta de agenda
+- Integraremos banco, reservas, lotação e limite semanal em seguida. A consulta de agenda
   nesta etapa não garante vaga restante, pois ainda não existem reservas.
 
 ## Execução
