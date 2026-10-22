@@ -18,7 +18,7 @@ class BookingService:
     def book(self, student: User, slot_id: int, question: str):
         if student.role != Role.STUDENT:
             raise PermissionDeniedError('Somente alunos podem reservar.')
-        question = question.strip()
+        question = question.strip() if isinstance(question, str) else ''
         if not question:
             raise ValueError('Informe o conteúdo da dúvida.')
         with self.repository.transaction():
@@ -83,7 +83,7 @@ class BookingService:
             now = self.clock()
             if slot.starts_at <= now:
                 raise ValueError('O atendimento já iniciou.')
-            reason = reason.strip()
+            reason = reason.strip() if isinstance(reason, str) else ''
             if slot.starts_at - now < timedelta(hours=72):
                 approved = self.repository.list_exception_requests(
                     status=RequestStatus.APPROVED, booking_id=booking_id)

@@ -5,7 +5,8 @@ from datetime import datetime
 
 from monitoring.errors import RequestStateError
 from monitoring.models import (
-    AppointmentSlot, Booking, ExceptionRequest, Notification, RequestStatus,
+    AppointmentSlot, Attendance, AttendanceStatus, Booking, ExceptionRequest, Feedback,
+    Notification, RequestStatus,
 )
 
 class SQLiteScheduleRepository:
@@ -39,7 +40,7 @@ class SQLiteScheduleRepository:
                 message TEXT NOT NULL,
                 created_at TEXT NOT NULL
             );
-                        CREATE TABLE IF NOT EXISTS exception_requests (
+            CREATE TABLE IF NOT EXISTS exception_requests (
                 id INTEGER PRIMARY KEY,
                 booking_id INTEGER NOT NULL REFERENCES bookings(id),
                 requester_id INTEGER NOT NULL,
@@ -53,6 +54,21 @@ class SQLiteScheduleRepository:
             );
             CREATE UNIQUE INDEX IF NOT EXISTS open_exception
             ON exception_requests(booking_id) WHERE status IN ('PENDING', 'APPROVED');
+            CREATE TABLE IF NOT EXISTS feedback (
+                id INTEGER PRIMARY KEY,
+                booking_id INTEGER NOT NULL UNIQUE REFERENCES bookings(id),
+                student_id INTEGER NOT NULL,
+                rating INTEGER NOT NULL CHECK(rating BETWEEN 1 AND 5),
+                comment TEXT NOT NULL DEFAULT '',
+                created_at TEXT NOT NULL
+            );
+            CREATE TABLE IF NOT EXISTS attendance (
+                id INTEGER PRIMARY KEY,
+                booking_id INTEGER NOT NULL UNIQUE REFERENCES bookings(id),
+                status TEXT NOT NULL CHECK(status IN ('PRESENT', 'ABSENT')),
+                marked_by INTEGER NOT NULL,
+                marked_at TEXT NOT NULL
+            );
         ''')
 
     @contextmanager
@@ -186,3 +202,50 @@ class SQLiteScheduleRepository:
             'decision_note = ? WHERE id = ?',
             (RequestStatus(status).value, decided_by, decided_at.isoformat(), note, request_id))
         return self.get_exception_request(request_id)
+
+    @staticmethod
+    def _feedback(row):
+        return Feedback(row['id'], row['booking_id'], row['student_id'], row['rating'],
+                        row['comment'], datetime.fromisoformat(row['created_at']))
+
+    def add_feedback(self, booking_id, student_id, rating, comment, created_at):
+        """Chamar dentro de `transaction()`: uma avaliação por reserva."""
+        if self.connection.execute('SELECT 1 FROM feedback WHERE booking_id = ?',
+                                   (booking_id,)).fetchone():
+            raise ValueError('Esta reserva já foi avaliada.')
+        cursor = self.connection.execute(
+            'INSERT INTO feedback(booking_id, student_id, rating, comment, created_at) '
+            'VALUES (?, ?, ?, ?, ?)',
+            (booking_id, student_id, rating, comment, created_at.isoformat()))
+        return self._feedback(self.connection.execute(
+            'SELECT * FROM feedback WHERE id = ?', (cursor.lastrowid,)).fetchone())
+
+    def list_feedback(self):
+        return [self._feedback(row) for row in
+                self.connection.execute('SELECT * FROM feedback ORDER BY id')]
+
+    @staticmethod
+    def _attendance(row):
+        return Attendance(row['id'], row['booking_id'], AttendanceStatus(row['status']),
+                          row['marked_by'], datetime.fromisoformat(row['marked_at']))
+
+    def add_attendance(self, booking_id, status, marked_by, marked_at):
+        """Chamar dentro de `transaction()`: uma marcação por reserva."""
+        if self.connection.execute('SELECT 1 FROM attendance WHERE booking_id = ?',
+                                   (booking_id,)).fetchone():
+            raise ValueError('A presença desta reserva já foi registrada.')
+        cursor = self.connection.execute(
+            'INSERT INTO attendance(booking_id, status, marked_by, marked_at) VALUES (?, ?, ?, ?)',
+            (booking_id, AttendanceStatus(status).value, marked_by, marked_at.isoformat()))
+        return self._attendance(self.connection.execute(
+            'SELECT * FROM attendance WHERE id = ?', (cursor.lastrowid,)).fetchone())
+
+    def get_attendance(self, booking_id):
+        """Marcação da reserva, ou None se ainda não foi registrada."""
+        row = self.connection.execute('SELECT * FROM attendance WHERE booking_id = ?',
+                                      (booking_id,)).fetchone()
+        return self._attendance(row) if row else None
+
+    def list_attendance(self):
+        return [self._attendance(row) for row in
+                self.connection.execute('SELECT * FROM attendance ORDER BY id')]

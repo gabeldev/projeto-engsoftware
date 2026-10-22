@@ -48,6 +48,7 @@ class Notification:
     message: str
     created_at: datetime
 
+
 class RequestStatus(str, Enum):
     PENDING = 'PENDING'
     APPROVED = 'APPROVED'
@@ -65,3 +66,27 @@ class ExceptionRequest:
     decided_by: int | None = None
     decided_at: datetime | None = None
     decision_note: str = ''
+
+
+@dataclass(frozen=True)
+class Feedback:
+    id: int
+    booking_id: int
+    student_id: int
+    rating: int
+    comment: str
+    created_at: datetime
+
+
+class AttendanceStatus(str, Enum):
+    PRESENT = 'PRESENT'
+    ABSENT = 'ABSENT'
+
+
+@dataclass(frozen=True)
+class Attendance:
+    id: int
+    booking_id: int
+    status: AttendanceStatus
+    marked_by: int
+    marked_at: datetime

@@ -160,3 +160,32 @@ class BookingIntegrationTests(unittest.TestCase):
             self.assertEqual(repo.list_notifications(3), [])
             service.cancel(monitor, booking.id, 'Indisponibilidade')
             self.assertEqual(repo.get_booking(booking.id).status, 'CANCELLED')
+
+
+class InvalidInputTests(unittest.TestCase):
+    def setUp(self):
+        self.repo = SQLiteScheduleRepository(':memory:')
+        self.addCleanup(self.repo.close)
+        self.now = datetime(2026, 10, 19, 10)
+        self.monitor = User(2, 'Monitor', Role.MONITOR)
+        self.student = User(3, 'Aluno', Role.STUDENT)
+        self.admin = User(1, 'Admin', Role.ADMIN)
+        self.schedule = ScheduleService(self.repo, clock=lambda: self.now)
+        self.service = BookingService(self.repo, clock=lambda: self.now)
+        self.slot = self.schedule.create_slot(self.monitor, 'Calculus', self.now + timedelta(hours=24), 1)
+
+    def test_none_question_is_a_clear_error_not_a_crash(self):
+        with self.assertRaisesRegex(ValueError, 'conteúdo'):
+            self.service.book(self.student, self.slot.id, None)
+        self.assertEqual(self.repo.list_bookings(), [])
+
+    def test_none_cancellation_reason_is_treated_as_empty(self):
+        booking = self.service.book(self.student, self.slot.id, 'Derivadas')
+        with self.assertRaisesRegex(ValueError, 'justificativa'):
+            self.service.cancel(self.admin, booking.id, None)
+        self.assertEqual(self.service.list_bookings(self.student)[0].status, 'ACTIVE')
+
+    def test_unknown_booking_cancellation_is_a_clear_error(self):
+        with self.assertRaisesRegex(ValueError, 'inexistente'):
+            self.service.cancel(self.admin, 999, 'x')
+
